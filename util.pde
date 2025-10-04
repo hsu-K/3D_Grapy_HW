@@ -161,6 +161,64 @@ public void CGEllipse(float x, float y, float r1, float r2) {
     // Otherwise, you will receive a score of 0 for this part.
     // Utilize the function drawPoint(x, y, color) to apply color to the pixel at
     // coordinates (x, y).
+    
+    //println("r1 =", r1, "r2 =", r2);
+    float dx, dy, d1, d2, xk, yk;
+    xk = 0;
+    yk = r2;
+    
+    d1 = (r2 * r2) - (r1 * r1 * r2) + (0.25 * r1 * r1);
+    dx = 2 * r2 * r2 * xk;
+    dy = 2 * r1 * r1 * yk;
+    
+    
+    // For region 1
+    drawPoint(x, y + yk, color(0, 0, 0));
+    drawPoint(x + r1, y, color(0, 0, 0));
+    drawPoint(x, y - yk, color(0, 0, 0));
+    drawPoint(x - r1, y, color(0, 0, 0));
+    
+    while(dx < dy){
+        drawPoint(x + xk, y + yk, color(0, 0, 0));
+        drawPoint(x - xk, y + yk, color(0, 0, 0));
+        drawPoint(x + xk, y - yk, color(0, 0, 0));
+        drawPoint(x - xk, y - yk, color(0, 0, 0));
+        if(d1 < 0){
+            xk += 1;
+            dx = dx + (2 * r2 * r2);
+            d1 = d1 + dx + (r2 * r2);
+        }
+        else{
+            xk += 1;
+            yk -= 1;
+            dx = dx + (2 * r2 * r2);
+            dy = dy - (2 * r1 * r1);
+            d1 = d1 + dx - dy + (r2 * r2);
+        }
+    }
+    
+    d2 = ((r2 * r2) * ((xk + 0.5) * (xk + 0.5))) + ((r1 * r1) * ((yk - 1) * (yk - 1))) - (r1 * r1 * r2 * r2);
+    
+    while(yk >= 0){
+        drawPoint(x + xk, y + yk, color(0, 0, 0));
+        drawPoint(x - xk, y + yk, color(0, 0, 0));
+        drawPoint(x + xk, y - yk, color(0, 0, 0));
+        drawPoint(x - xk, y - yk, color(0, 0, 0));
+        
+        if(d2 > 0){
+            yk -= 1;
+            dy = dy - (2 * r1 * r1);
+            d2 = d2 + (r1 * r1) - dy;
+        }
+        else{
+            yk -= 1;
+            xk += 1;
+            dx = dx + (2 * r2 * r2);
+            dy = dy - (2 * r1 * r1);
+            d2 = d2 + dx - dy + (r1 * r1);
+        }
+    }
+   
 
     /*
     stroke(0);
