@@ -237,7 +237,18 @@ public void CGCurve(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4) {
     // Otherwise, you will receive a score of 0 for this part.
     // Utilize the function drawPoint(x, y, color) to apply color to the pixel at
     // coordinates (x, y).
-
+    
+    float x, y;
+    
+    float t = 0;
+    while(t <= 1){
+        x = pow((1 - t), 3) * p1.x + 3 * pow((1-t), 2) * t * p2.x + 3 * (1 - t) * pow(t, 2) * p3.x + pow(t, 3) * p4.x;
+        y = pow((1 - t), 3) * p1.y + 3 * pow((1-t), 2) * t * p2.y + 3 * (1 - t) * pow(t, 2) * p3.y + pow(t, 3) * p4.y;
+        drawPoint(x, y, color(0, 0, 0));
+        t += 0.0001;
+    }
+    
+    //println(p1, p2, p3, p4);
     /*
     stroke(0);
     noFill();
