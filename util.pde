@@ -1,5 +1,5 @@
 public void CGLine(float x1, float y1, float x2, float y2) {
-    drawPoint(x1, y1, color(255, 0, 0));
+    drawPoint(x1, y1, color(0, 0, 0));
    
     
      //stroke(0);
@@ -50,7 +50,7 @@ public void CGLine(float x1, float y1, float x2, float y2) {
             else if(flag == 3){
                 draw_x = x1 - (x - x1);
             }
-            drawPoint(draw_x, draw_y, color(255, 0, 0));
+            drawPoint(draw_x, draw_y, color(0, 0, 0));
         }
     }
     else if( dx <= dy ){
@@ -78,7 +78,7 @@ public void CGLine(float x1, float y1, float x2, float y2) {
             else if(flag == 3){
                 draw_x = x1 - (x - x1);
             }
-            drawPoint(draw_x, draw_y, color(255, 0, 0));
+            drawPoint(draw_x, draw_y, color(0, 0, 0));
         }
     }
     
@@ -111,7 +111,41 @@ public void CGCircle(float x, float y, float r) {
     // Otherwise, you will receive a score of 0 for this part.
     // Utilize the function drawPoint(x, y, color) to apply color to the pixel at
     // coordinates (x, y).
-
+    //println("x =", x, " y =", y, "r =", r);
+    float P, xk, yk;
+    P = 1 - r;
+    xk = r; yk = 0;
+    drawPoint(x + r, y, color(0, 0, 0));
+    drawPoint(x, y + r, color(0, 0, 0));
+    drawPoint(x - r, y, color(0, 0, 0));
+    drawPoint(x, y - r, color(0, 0, 0));
+    while(xk > yk){
+        yk += 1;
+        if(P <= 0){
+            P = P + 2 * yk + 1;
+        }
+        else{
+            xk -= 1;
+            P = P + 2 * yk - 2 * xk + 1;
+        }
+        
+        if (xk < yk){
+            break;
+        }
+        drawPoint(x + xk, y - yk, color(0, 0, 0));
+        drawPoint(x + yk, y - xk, color(0, 0, 0));
+        
+        drawPoint(x - xk, y - yk, color(0, 0, 0));
+        drawPoint(x - yk, y - xk, color(0, 0, 0));
+ 
+        drawPoint(x - xk, y + yk, color(0, 0, 0));
+        drawPoint(x - yk, y + xk, color(0, 0, 0));
+        
+        drawPoint(x + xk, y + yk, color(0, 0, 0));
+        drawPoint(x + yk, y + xk, color(0, 0, 0));
+        
+    }
+    
     /*
     stroke(0);
     noFill();
