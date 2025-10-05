@@ -60,7 +60,7 @@ I use De Casteljau’s algorithm.
 
 1. Connect control points
 2. For each t in the interval from 0 to 1
-3. Take points on these segments on the distance proportional to t from the beginning, and then connect them, repeat this step until get one point
+3. Take points on these segments on the distance proportional to t from the beginning, and then connect them, repeat these steps until get one point
 
 `P = (1−t)^3 *P1 + 3(1−t) ^2 *t *P2 +3(1−t) *t^2 *P3 + t^3 * P4` is the formula
 
@@ -73,5 +73,6 @@ https://javascript.info/bezier-curve
 
 ### Description
 I draw background color point in the eraser square.
+
 But I found that if I erase too many areas, the program will becomes laggy.
 So I asked chatGPT about this issue, and it recommended that I store the points to be drawn in an array and render them all at once, but it doesn’t seem to help much.
