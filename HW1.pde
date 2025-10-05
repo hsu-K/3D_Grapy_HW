@@ -15,7 +15,7 @@ float eraserSize = 20;
 public void setup() {
     size(1000, 800);
     //smooth();
-    background(255);
+    background(color(255));
     shapeRenderer = new ShapeRenderer();
     initButton();
 

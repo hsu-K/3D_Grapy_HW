@@ -119,7 +119,7 @@ public void CGCircle(float x, float y, float r) {
     drawPoint(x, y + r, color(0, 0, 0));
     drawPoint(x - r, y, color(0, 0, 0));
     drawPoint(x, y - r, color(0, 0, 0));
-    while(xk > yk){
+    while(xk >= yk){
         yk += 1;
         if(P <= 0){
             P = P + 2 * yk + 1;
@@ -268,6 +268,22 @@ public void CGEraser(Vector3 p1, Vector3 p2) {
     // You can use the mouse wheel to change the eraser range.
     // Utilize the function drawPoint(x, y, color) to apply color to the pixel at
     // coordinates (x, y).
+    float xk, yk;
+    xk = p1.x;
+    yk = p1.y;
+    ArrayList<PVector> erasePoints = new ArrayList<PVector>();
+    while(xk <= p2.x){
+        while(yk <= p2.y){
+            erasePoints.add(new PVector(xk, yk));
+            yk += 1;
+        }
+        for (PVector p : erasePoints) {
+            drawPoint((int)p.x, (int)p.y, color(250));
+        }
+        erasePoints.clear();
+        yk = p1.y;
+        xk += 1;
+    }
 
 }
 
