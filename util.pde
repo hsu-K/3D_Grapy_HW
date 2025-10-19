@@ -174,7 +174,53 @@ public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] bounda
     // The function you pass 2 parameter. One is the vertexes of the shape "points".
     // And the other is the vertices of the "boundary".
     // The output is the vertices of the polygon.
+    //int ii = 1;
+    //for(Vector3 p: input){
+    //    println(ii, p.x, p.y, p.z);
+    //    ii += 1;
+    //}
 
+    for(int i = 0; i < boundary.length ; i++){
+        output = new ArrayList<>(input);  
+        int pre = output.size() - 1;
+        input.clear();
+        for(int j = 0; j < output.size() ; j++){
+            boolean p1_inside = false;
+            boolean p2_inside = false;
+            
+ 
+            if( i == 0 ){
+                if(output.get(pre).x >= boundary[i].x) p1_inside = true;
+                if(output.get(j).x >= boundary[i].x) p2_inside = true;
+            }
+            else if (i == 1){
+                if(output.get(pre).y <= boundary[i].y) p1_inside = true;
+                if(output.get(j).y <= boundary[i].y) p2_inside = true;   
+            }
+            else if (i == 2){
+                if(output.get(pre).x <= boundary[i].x) p1_inside = true;
+                if(output.get(j).x <= boundary[i].x) p2_inside = true;   
+            }
+            else if (i == 3){
+                if(output.get(pre).y >= boundary[i].y) p1_inside = true;
+                if(output.get(j).y >= boundary[i].y) p2_inside = true;   
+            }
+            
+            if(p1_inside == true && p2_inside == true){
+                input.add(output.get(j));
+            }
+            else if(p1_inside == true && p2_inside == false){
+                input.add(intersection(output.get(pre), output.get(j), boundary[i], boundary[(i+1)%4]));
+            }
+            else if(p1_inside == false && p2_inside == true){
+                input.add(intersection(output.get(pre), output.get(j), boundary[i], boundary[(i+1)%4]));
+
+                input.add(output.get(j));  
+          }
+          
+          pre = j;
+        }
+    }
     output = input;
 
     Vector3[] result = new Vector3[output.size()];
@@ -182,4 +228,14 @@ public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] bounda
         result[i] = output.get(i);
     }
     return result;
+}
+
+public Vector3 intersection(Vector3 S, Vector3 E, Vector3 A, Vector3 B){
+    float dx1 = E.x - S.x;
+    float dy1 = E.y - S.y;
+    float dx2 = B.x - A.x;
+    float dy2 = B.y - A.y;
+
+    float t = ((A.x - S.x) * dy2 - (A.y - S.y) * dx2) / (dx1 * dy2 - dy1 * dx2);
+    return new Vector3(S.x + t * dx1, S.y + t * dy1, 0);
 }
