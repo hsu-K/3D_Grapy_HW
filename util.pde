@@ -1,7 +1,88 @@
 public void CGLine(float x1, float y1, float x2, float y2) {
     // TODO HW1
     // Please paste your code from HW1 CGLine.
-
+    drawPoint(x1, y1, color(0, 0, 0));
+   
+    
+     //stroke(0);
+     //noFill();
+     //line(x1-10,y1,x2-10,y2);
+    float flag = 0;
+    if(x1 <= x2 && y1 > y2){
+        flag = 1;
+        y2 = y1 + y1 - y2;
+    }
+    else if(x1 > x2 && y1 >= y2){
+        flag = 2;
+        x2 = x1 + (x1 - x2);
+        y2 = y1 + (y1 - y2);
+    }
+    else if(x1 > x2 && y1 < y2){
+        flag = 3;
+        x2 = x1 + (x1 - x2);
+    }
+    
+    float dx, dy, d, x, y, draw_x, draw_y;
+    dy = y2 - y1;
+    dx = x2 - x1;
+    
+    if(dy <= dx){
+        d = dy - (dx / 2);
+        x = x1;
+        y = y1;
+        for (; x < x2;){
+            x += 1;
+            
+            // E is chosen
+            if(d < 0){
+                d = d + dy;
+            }
+            else{
+                d = d + dy - dx;
+                y += 1;
+            }
+            draw_x = x; draw_y = y;
+            if(flag == 1){
+                draw_y = y1 - (y - y1);
+            }
+            else if(flag == 2){
+                draw_x = x1 - (x - x1);
+                draw_y = y1 - (y - y1);
+            }
+            else if(flag == 3){
+                draw_x = x1 - (x - x1);
+            }
+            drawPoint(draw_x, draw_y, color(0, 0, 0));
+        }
+    }
+    else if( dx <= dy ){
+        d = dx - (dy / 2);
+        x = x1;
+        y = y1;
+        
+        for(; y < y2;){
+            y += 1;
+            if(d < 0){
+                d = d + dx;  
+            }
+            else{
+              d = d + dx - dy;
+              x += 1;
+            }
+            draw_x = x; draw_y = y;
+            if(flag == 1){
+                draw_y = y1 - (y - y1);
+            }
+            else if(flag == 2){
+                draw_x = x1 - (x - x1);
+                draw_y = y1 - (y - y1);
+            }
+            else if(flag == 3){
+                draw_x = x1 - (x - x1);
+            }
+            drawPoint(draw_x, draw_y, color(0, 0, 0));
+        }
+    }
 }
 
 public boolean outOfBoundary(float x, float y) {
