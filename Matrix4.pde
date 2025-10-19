@@ -76,6 +76,9 @@ static class Matrix4{
     // TODO HW2
     // You need to implement the scale matrix here.
     makeIdentity();
+    m[0] = s.x;
+    m[5] = s.y;
+    m[10] = s.z;
   }
   
   void makeMirror(){
