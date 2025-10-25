@@ -181,53 +181,43 @@ public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] bounda
     //}
 
     for(int i = 0; i < boundary.length ; i++){
-        output = new ArrayList<>(input);  
-        int pre = output.size() - 1;
-        input.clear();
-        for(int j = 0; j < output.size() ; j++){
-            boolean p1_inside = false;
-            boolean p2_inside = false;
-            
- 
-            if( i == 0 ){
-                if(output.get(pre).x >= boundary[i].x) p1_inside = true;
-                if(output.get(j).x >= boundary[i].x) p2_inside = true;
-            }
-            else if (i == 1){
-                if(output.get(pre).y <= boundary[i].y) p1_inside = true;
-                if(output.get(j).y <= boundary[i].y) p2_inside = true;   
-            }
-            else if (i == 2){
-                if(output.get(pre).x <= boundary[i].x) p1_inside = true;
-                if(output.get(j).x <= boundary[i].x) p2_inside = true;   
-            }
-            else if (i == 3){
-                if(output.get(pre).y >= boundary[i].y) p1_inside = true;
-                if(output.get(j).y >= boundary[i].y) p2_inside = true;   
-            }
-            
-            if(p1_inside == true && p2_inside == true){
-                input.add(output.get(j));
-            }
-            else if(p1_inside == true && p2_inside == false){
-                input.add(intersection(output.get(pre), output.get(j), boundary[i], boundary[(i+1)%4]));
-            }
-            else if(p1_inside == false && p2_inside == true){
-                input.add(intersection(output.get(pre), output.get(j), boundary[i], boundary[(i+1)%4]));
+        Vector3 A = boundary[i];
+        Vector3 B = boundary[( i + 1) % boundary.length];
+        output.clear();  
+        int pre = input.size() - 1;
 
-                input.add(output.get(j));  
-          }
+        for(int j = 0; j < input.size() ; j++){
+            Vector3 S = input.get(pre);
+            Vector3 E = input.get(j);
           
-          pre = j;
+            boolean S_inside = isInside(S, A, B);
+            boolean E_inside = isInside(E, A, B);
+            
+            println(S_inside, E_inside);
+            if(S_inside == true && E_inside == true){
+                output.add(E);
+            }
+            else if(S_inside == true && E_inside == false){
+                output.add(intersection(S, E, A, B));
+            }
+            else if(S_inside == false && E_inside == true){
+                output.add(intersection(S, E, A, B));
+                output.add(E);  
+           }
+           pre = j;
         }
+        input = new ArrayList<>(output);
     }
-    output = input;
-
+    
     Vector3[] result = new Vector3[output.size()];
     for (int i = 0; i < result.length; i += 1) {
         result[i] = output.get(i);
     }
     return result;
+}
+
+boolean isInside(Vector3 P, Vector3 A, Vector3 B) {
+    return (B.x - A.x)*(P.y - A.y) - (B.y - A.y)*(P.x - A.x) <= 0;
 }
 
 public Vector3 intersection(Vector3 S, Vector3 E, Vector3 A, Vector3 B){
