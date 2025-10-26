@@ -1,52 +1,59 @@
-public void CGLine(float x1, float y1, float x2, float y2) {
+void CGLine(float x1, float y1, float x2, float y2) {
     // TODO HW1
     // Please paste your code from HW1 CGLine.
-    //drawPoint(x1, y1, color(0, 0, 0));
     
-    
-    if(x1 > x2){
-        float tmp;
-        tmp = x1; x1 = x2; x2 = tmp;
-        tmp = y1; y1 = y2; y2 = tmp;
+    if (x1 > x2) {
+        float tmpx = x1; float tmpy = y1;
+        x1 = x2; y1 = y2;
+        x2 = tmpx; y2 = tmpy;
     }
-    
-    if(abs(y2 - y1) > abs(x2 - x1)){
-        float tmp;
-        tmp = x1; x1 = y1; y1 = tmp;
-        tmp = x2 ; x2 = y2; y2 = tmp;
+  
+    for (int px = int(min(x1, x2)); px <= int(max(x1, x2)); px++) {
+        for (int py = int(min(y1, y2)); py <= int(max(y1, y2)); py++) {
+            int covered = 0;
+            int samples = 4;
+      
+            float[] offsets = {-0.25, 0.25};
+      
+            for (float ox : offsets) {
+                for (float oy : offsets) {
+                    float sx = px + 0.5 + ox;
+                    float sy = py + 0.5 + oy;
+          
+                    float dis = pointLineDistance(sx, sy, x1, y1, x2, y2);
+          
+                    if (dis < 0.5) covered++;
+                }
+            }
+            
+            float brightness = 255 * (1 - covered / float(samples));
+            //if(brightness != 255){
+            //    drawPoint(px, py, color(brightness));
+            //}
+            stroke(brightness);
+            point(px, py);
+        }
     }
-    
-    float flag = 0;
-    if(y1 > y2){
-        flag = 1;
-        y2 = y1 + y1 - y2;
-    }
-    
-    float dx = x2 - x1;
-    float dy = y2 - y1;
-    float x, y, d;
-    //float gradient = (dx == 0) ? 1 : dy / dx;
-    
-    d = dy - (dx / 2);
-    x = x1;
-    y = y1;
-    for(; x < x2;){
-        x += 1;
-        if( d < 0 ){
-            d =  d + dy;
-        }
-        else{
-            d = d + dy - dx;
-            y += 1;
-        }
-        if(flag == 1){
-            drawPoint(x, y1 - (y - y1), color(0, 0, 0));
-        }
-        else{
-            drawPoint(x, y, color(0, 0, 0));
-        }
-    }  
 }
+
+float pointLineDistance(float px, float py, float x1, float y1, float x2, float y2) {
+  float A = px - x1;
+  float B = py - y1;
+  float C = x2 - x1;
+  float D = y2 - y1;
+
+  float dot = A * C + B * D;
+  float len_sq = C * C + D * D;
+  float t = constrain(dot / len_sq, 0, 1);
+
+  float closestX = x1 + t * C;
+  float closestY = y1 + t * D;
+
+  float dx = px - closestX;
+  float dy = py - closestY;
+  return sqrt(dx * dx + dy * dy);
+}
+
 
 public boolean outOfBoundary(float x, float y) {
     if (x < 0 || x >= width || y < 0 || y >= height)

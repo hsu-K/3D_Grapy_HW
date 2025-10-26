@@ -8,6 +8,7 @@ https://hackmd.io/@lab31718/CGlab1
 - [x] Is the point inside a shape?
 - [x] Find the boundary of a polygon
 - [x] Keep the polygon inside the canvas
+- [x] SSAA (Super-Sampling for Anti-Aliasing)
 
 ## Translation Matrix
 ![Trans](./images/Translation.png)
@@ -53,3 +54,13 @@ I traverse all the edges in a counterclockwise direction and determine the relat
 If both points are inside, I add the second point.
 If the first point is inside and the second point is outside, I add the intersection point.
 If the first point is outside and the second point is inside, I add the intersection point and the second point.
+
+## SSAA (Super-Sampling for Anti-Aliasing)
+![SASS](./images/SASS.png)
+
+### Description
+I modified the original CGLine. I originally wanted to use `midPoint algorithm` to make adjustments, but it didn’t improve the jagged edges. After consulting ChatGPT, I found out that because `midPoint algorithm` already selects specific points, it prevents improving the jaggedness. ChatGPT recommended that I iterate over all the points within the range.
+
+So, I traverse all coordinates within the range from left to right. Each coordinate is divided into a 2x2 area, and then I calculate the distance from the coordinate point to the original line segment to determine the depth.
+
+I originally used `drawPoint` to draw the points, but I still noticed obvious jagged edges. I asked ChatGPT, and it recommended using `point` to draw the points instead. However, I still don’t understand why `drawPoint` doesn’t work.
