@@ -35,7 +35,6 @@ static public class Matrix4{
     // TODO HW2
     // You need to implement the rotation of x-axis matrix here.
      makeIdentity();
-     println(a);
      m[5] = cos(a);
      m[6] = -sin(a);
      m[9] = sin(a);
@@ -53,7 +52,6 @@ static public class Matrix4{
   void makeRotZ(float a) {
     // TODO HW2
     // You need to implement the rotation of z-axis matrix here.
-    println(a);
     makeIdentity();
     m[0] = cos(a);
     m[1] = -sin(a);
