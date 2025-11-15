@@ -1,22 +1,27 @@
-public class ShapeRenderer {
+public class Renderer {
     private Box box;
-    private ArrayList<Shape> shapes;
+    private ArrayList<GameObject> gameObject;
 
-    public ShapeRenderer() {
-        box = new Box(20, 50, 500, height - 100);
+    public Renderer() {
+        box = new Box(renderer_size.x, renderer_size.y, renderer_size.z - renderer_size.x,
+                renderer_size.w - renderer_size.y);
         box.setBoxColor(250);
-        shapes = new ArrayList<Shape>();
+        gameObject = new ArrayList<GameObject>();
     }
 
     public void run() {
         box.show();
-        shapes.forEach(Shape::drawShape);
+        gameObject.forEach(GameObject::Draw);
+        image(renderBuffer, renderer_size.x, renderer_size.y, renderer_size.z - renderer_size.x,
+                renderer_size.w - renderer_size.y);
+        if (debug)
+            gameObject.forEach(GameObject::debugDraw);
 
     }
 
-    public void addShape(Shape s) {
-        shapes.add(s);
-        engine.hierarchy.addButton(s);
+    public void addGameObject(GameObject go) {
+        gameObject.add(go);
+        engine.hierarchy.addButton(go);
     }
 
     public boolean checkInBox(Vector3 v) {
@@ -24,34 +29,34 @@ public class ShapeRenderer {
     }
 
     public void popShape() {
-        if (shapes.size() <= 0)
+        if (gameObject.size() <= 0)
             return;
-        shapes.remove(shapes.size() - 1);
+        gameObject.remove(gameObject.size() - 1);
     }
 
     public void clear() {
-        shapes.clear();
+        gameObject.clear();
     }
 }
 
 public class Hierarchy {
     private Box box;
-    ArrayList<Shape> shapes;
+    ArrayList<GameObject> gameObject;
     ArrayList<HierarchyButton> buttons;
 
-    public Hierarchy(ArrayList<Shape> s) {
+    public Hierarchy(ArrayList<GameObject> go) {
         box = new Box(500 + 40, 50, 200, height - 100);
         box.setBoxColor(250);
-        shapes = s;
+        gameObject = go;
         buttons = new ArrayList<HierarchyButton>();
     }
 
-    public void addButton(Shape s) {
+    public void addButton(GameObject go) {
         float y = buttons.size() * 30;
         HierarchyButton hb = new HierarchyButton(box.pos.x, box.pos.y + y, 200, 30);
-        hb.name = s.getShapeName();
+        hb.name = go.getGameObjectName();
         hb.setBoxAndClickColor(color(250), color(150));
-        hb.shape = s;
+        hb.gameObject = go;
         buttons.add(hb);
     }
 
@@ -64,7 +69,7 @@ public class Hierarchy {
 
         for (HierarchyButton hb : buttons) {
             hb.run(() -> {
-                engine.inspector.setShape(hb.shape);
+                engine.inspector.setGameObject(hb.gameObject);
             });
         }
     }
@@ -72,7 +77,7 @@ public class Hierarchy {
 
 public class Inspector {
     private Box box;
-    Shape shape;
+    GameObject gameObject;
     Slider[] position_slider = new Slider[3];
     Slider[] rotation_slider = new Slider[3];
     Slider[] scale_slider = new Slider[3];
@@ -84,31 +89,31 @@ public class Inspector {
         box.setBoxColor(250);
     }
 
-    public void setShape(Shape s) {
-        shape = s;
+    public void setGameObject(GameObject go) {
+        gameObject = go;
         for (int i = 0; i < position_slider.length; i++) {
             position_slider[i] = new Slider(box.pos.add(new Vector3(40, 30 + i * 20, 0)),
-                    new Vector3(box.pos.x + 40, box.pos.x + 150, 0), new Vector3(-1, 1, 0), true);
+                    new Vector3(box.pos.x + 40, box.pos.x + 150, 0), new Vector3(-50, 50, 0), true);
         }
-        position_slider[0].setValue(shape.transform.position.x);
-        position_slider[1].setValue(shape.transform.position.y);
-        position_slider[2].setValue(shape.transform.position.z);
+        position_slider[0].setValue(gameObject.transform.position.x);
+        position_slider[1].setValue(gameObject.transform.position.y);
+        position_slider[2].setValue(gameObject.transform.position.z);
 
         for (int i = 0; i < rotation_slider.length; i++) {
             rotation_slider[i] = new Slider(box.pos.add(new Vector3(40, 30 + i * 20 + 100, 0)),
                     new Vector3(box.pos.x + 40, box.pos.x + 150, 0), new Vector3(0, 6.28, 0), true);
         }
-        rotation_slider[0].setValue(shape.transform.rotation.x);
-        rotation_slider[1].setValue(shape.transform.rotation.y);
-        rotation_slider[2].setValue(shape.transform.rotation.z);
+        rotation_slider[0].setValue(gameObject.transform.rotation.x);
+        rotation_slider[1].setValue(gameObject.transform.rotation.y);
+        rotation_slider[2].setValue(gameObject.transform.rotation.z);
 
         for (int i = 0; i < scale_slider.length; i++) {
             scale_slider[i] = new Slider(box.pos.add(new Vector3(40, 30 + i * 20 + 200, 0)),
                     new Vector3(box.pos.x + 40, box.pos.x + 150, 0), new Vector3(0.1, 3, 0), true);
         }
-        scale_slider[0].setValue(shape.transform.scale.x);
-        scale_slider[1].setValue(shape.transform.scale.y);
-        scale_slider[2].setValue(shape.transform.scale.z);
+        scale_slider[0].setValue(gameObject.transform.scale.x);
+        scale_slider[1].setValue(gameObject.transform.scale.y);
+        scale_slider[2].setValue(gameObject.transform.scale.z);
 
     }
 
@@ -118,7 +123,7 @@ public class Inspector {
         fill(0);
         text("Inspector", box.pos.x, box.pos.y - 10);
         box.show();
-        if (shape != null) {
+        if (gameObject != null) {
             textAlign(LEFT, CENTER);
             textSize(15);
             fill(0);
@@ -132,7 +137,7 @@ public class Inspector {
                 position_slider[i].show();
                 position_slider[i].click();
             }
-            shape.transform.position = new Vector3(position_slider[0].value(), position_slider[1].value(),
+            gameObject.transform.position = new Vector3(position_slider[0].value(), position_slider[1].value(),
                     position_slider[2].value());
 
             textAlign(LEFT, CENTER);
@@ -148,7 +153,7 @@ public class Inspector {
                 rotation_slider[i].show();
                 rotation_slider[i].click();
             }
-            shape.transform.rotation = new Vector3(rotation_slider[0].value(), rotation_slider[1].value(),
+            gameObject.transform.rotation = new Vector3(rotation_slider[0].value(), rotation_slider[1].value(),
                     rotation_slider[2].value());
 
             textAlign(LEFT, CENTER);
@@ -164,7 +169,7 @@ public class Inspector {
                 scale_slider[i].show();
                 scale_slider[i].click();
             }
-            shape.transform.scale = new Vector3(scale_slider[0].value(), scale_slider[1].value(),
+            gameObject.transform.scale = new Vector3(scale_slider[0].value(), scale_slider[1].value(),
                     scale_slider[2].value());
 
         }

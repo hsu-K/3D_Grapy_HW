@@ -86,8 +86,9 @@ public class Button extends Box {
 
     public void click(ButtonFunction bf) {
 
-        if (!checkInSide())
+        if (!checkInSide()) {
             return;
+        }
         if (mousePressed) {
             press = true;
             if (!once) {
@@ -104,7 +105,7 @@ public class Button extends Box {
 
 public class HierarchyButton extends Button {
     String name;
-    Shape shape;
+    GameObject gameObject;
 
     public HierarchyButton(float x, float y, float w, float h) {
         super(x, y, w, h);
@@ -153,7 +154,7 @@ public class ShapeButton extends Button {
         selected = b;
     }
 
-    public Shape renderShape() {
+    public GameObject renderShape() {
         return null;
     }
 

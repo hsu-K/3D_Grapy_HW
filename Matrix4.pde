@@ -1,4 +1,4 @@
-static class Matrix4{
+static public class Matrix4{
   float m[]=new float[16];
   Matrix4(){
     makeZero();
@@ -31,54 +31,31 @@ static class Matrix4{
      m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
     
   }
-  void makeRotX(float a) {
+   void makeRotX(float a) {
     // TODO HW2
-    // You need to implement the rotation of x-axis matrix here. (Roll)
-    
-    makeIdentity();
-    //m[5] = cos(a);
-    //m[6] = -sin(a);
-    //m[9] = sin(a);
-    //m[10] = cos(a);
+    // You need to implement the rotation of x-axis matrix here.
+     makeIdentity();
   }
   void makeRotY(float a) {
     // TODO HW2
-    // You need to implement the rotation of y-axis matrix here. (Pitch)
+    // You need to implement the rotation of y-axis matrix here.
     makeIdentity();
-    //m[0] = cos(a);
-    //m[2] = sin(a);
-    //m[8] = -sin(a);
-    //m[10] = cos(a);
   }
   void makeRotZ(float a) {
-     // TODO HW2
-     // You need to implement the rotation of z-axis matrix here. (Yaw)
+    // TODO HW2
+    // You need to implement the rotation of z-axis matrix here.
     makeIdentity();
-    m[0] = cos(a);
-    m[1] = -sin(a);
-    m[4] = sin(a);
-    m[5] = cos(a);
-
   }
   
   void makeTrans(Vector3 t) {
     // TODO HW2
     // You need to implement the translate matrix here.
-    //println("t.x = " + t.x + ", t.y = " + t.y + ", t.z = " + t.z);
     makeIdentity();
-    //println(m[1]);
-    m[3] = t.x;
-    m[7] = t.y;
-    m[11] = t.z;
-    
   }
   void makeScale(Vector3 s) {
     // TODO HW2
-    // You need to implement the scale matrix here.
-    makeIdentity();
-    m[0] = s.x;
-    m[5] = s.y;
-    m[10] = s.z;
+    // You need to implement the scale matrix here.     
+   makeIdentity();
   }
   
   void makeMirror(){
