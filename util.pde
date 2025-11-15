@@ -163,7 +163,6 @@ public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] bounda
             boolean S_inside = isInside(S, A, B);
             boolean E_inside = isInside(E, A, B);
             
-            println(S_inside, E_inside);
             if(S_inside == true && E_inside == true){
                 output.add(E);
             }
