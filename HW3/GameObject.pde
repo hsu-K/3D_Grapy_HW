@@ -32,10 +32,27 @@ public class GameObject {
             Triangle triangle = mesh.triangles.get(i);
             Vector3[] position = triangle.verts;
             Vector4[] gl_Position = shader.vertex.main(new Object[]{position}, new Object[]{MVP});
+
+            boolean allBehind = true;
+            for (Vector4 v : gl_Position) {
+                if (v.w > 0) {
+                    allBehind = false;
+                    break;
+                }
+            }
+            if (allBehind) continue;
+
             Vector3[] s_Position = new Vector3[3];
             for (int j = 0; j<gl_Position.length; j++) {
                 s_Position[j] = gl_Position[j].homogenized();
             }
+
+            // Back-face Culling
+            Vector3 edge1 = Vector3.sub(s_Position[1], s_Position[0]);
+            Vector3 edge2 = Vector3.sub(s_Position[2], s_Position[0]);
+            Vector3 normal = Vector3.cross(edge1, edge2);
+            if (normal.z <= 0) continue;
+
             Vector3[] boundbox = findBoundBox(s_Position);
             float minX = map(min( max(boundbox[0].x, -1.0 ), 1.0), -1.0, 1.0, 0.0, renderer_size.z - renderer_size.x);
             float maxX = map(min( max(boundbox[1].x, -1.0 ), 1.0), -1.0, 1.0, 0.0, renderer_size.z - renderer_size.x);
@@ -73,6 +90,13 @@ public class GameObject {
             for (int j = 0; j < 3; j++) {
                 img_pos[j] = MVP.mult(triangle.verts[j].getVector4(1.0)).homogenized();
             }
+
+            Vector3 edge1 = Vector3.sub(img_pos[1], img_pos[0]);
+            Vector3 edge2 = Vector3.sub(img_pos[2], img_pos[0]);
+            Vector3 normal = Vector3.cross(edge1, edge2);
+            
+            if (normal.z <= 0) continue;
+
 
             for (int j = 0; j < img_pos.length; j++) {
                 img_pos[j] = new Vector3(map(img_pos[j].x, -1, 1, renderer_size.x, renderer_size.z),
