@@ -156,9 +156,9 @@ public float getDepth(float x, float y, Vector3[] vertex) {
     if (abs(maxZ - minZ) < 1e-6) {
         return 0;
     }
-    // return (z - minZ) / (maxZ - minZ);
+    return (z - minZ) / (maxZ - minZ);
     // return 0.0f;
-    return 1.0f;
+    // return 1.0f;
 
 
     // return z;
